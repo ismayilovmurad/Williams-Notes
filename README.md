@@ -1,0 +1,1 @@
+#William Shakespeare's notes. Simple notepad.
