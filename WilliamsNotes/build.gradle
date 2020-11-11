@@ -3,7 +3,7 @@ buildscript {
 
     ext {
         // Gradle
-        gradle_version = "4.1.0"
+        gradle_version = '4.1.1'
         // Kotlin
         kotlin_version = "1.4.10"
         // Compile SDK
@@ -30,6 +30,10 @@ buildscript {
         junit_version = "4.13.1"
         ext_junit_version = "1.1.2"
         espresso_version = "3.3.0"
+        // Navigation component
+        navigation_version = "2.3.1"
+        // RecyclerView
+        recyclerview_version = "1.1.0"
     }
 
     repositories {
