@@ -11,8 +11,11 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.martiandeveloper.williamsnotes.R
+import com.martiandeveloper.williamsnotes.adapter.NoteAdapter
 import com.martiandeveloper.williamsnotes.databinding.FragmentMainBinding
+import com.martiandeveloper.williamsnotes.model.Note
 import com.martiandeveloper.williamsnotes.viewmodel.MainViewModel
+import java.util.*
 
 class MainFragment : Fragment() {
 
@@ -35,10 +38,25 @@ class MainFragment : Fragment() {
 
         mainViewModel = getViewModel()
 
+        val noteList = arrayListOf<Note>()
+        noteList.add(Note(0, Date(), "sakdljaskldaadasdsdsdsdsss"))
+        noteList.add(
+            Note(
+                1,
+                Date(),
+                "sakdljaskldaadasdsdsdsdssssakdljaskldaadasdsdsdsdssssakdljaskldaadasdsdsdsdsss"
+            )
+        )
+        noteList.add(Note(2, Date(), "sakdljaskldaadasdsdsdsdssssakdljaskldaadasdsdsdsdsss"))
+
+        val noteAdapter = NoteAdapter(noteList)
+
         with(fragmentMainBinding.fragmentMainMainRV) {
             setHasFixedSize(true)
             val divider = DividerItemDecoration(context, LinearLayoutManager(context).orientation)
             addItemDecoration(divider)
+            adapter = noteAdapter
+            layoutManager = LinearLayoutManager(context)
         }
 
     }
