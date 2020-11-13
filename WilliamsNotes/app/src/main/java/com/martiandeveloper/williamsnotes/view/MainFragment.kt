@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -17,7 +18,7 @@ import com.martiandeveloper.williamsnotes.model.Note
 import com.martiandeveloper.williamsnotes.viewmodel.MainViewModel
 import java.util.*
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), NoteAdapter.ItemClickListener {
 
     private lateinit var mainViewModel: MainViewModel
 
@@ -49,7 +50,7 @@ class MainFragment : Fragment() {
         )
         noteList.add(Note(2, Date(), "sakdljaskldaadasdsdsdsdssssakdljaskldaadasdsdsdsdsss"))
 
-        val noteAdapter = NoteAdapter(noteList)
+        val noteAdapter = NoteAdapter(noteList, this)
 
         with(fragmentMainBinding.fragmentMainMainRV) {
             setHasFixedSize(true)
@@ -72,6 +73,10 @@ class MainFragment : Fragment() {
 
         })[MainViewModel::class.java]
 
+    }
+
+    override fun onItemClick(noteId: Int) {
+        Toast.makeText(context, "$noteId", Toast.LENGTH_SHORT).show()
     }
 
 }
