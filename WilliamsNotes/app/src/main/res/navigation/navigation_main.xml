@@ -21,6 +21,13 @@
         android:id="@+id/editFragment"
         android:name="com.martiandeveloper.williamsnotes.view.EditFragment"
         android:label="EditFragment"
-        tools:layout="@layout/fragment_edit" />
+        tools:layout="@layout/fragment_edit">
+
+        <argument
+            android:name="noteId"
+            android:defaultValue="0"
+            app:argType="integer" />
+
+    </fragment>
 
 </navigation>

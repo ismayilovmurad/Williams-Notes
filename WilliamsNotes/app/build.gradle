@@ -3,6 +3,8 @@ plugins {
     id 'kotlin-android'
     // Data binding
     id 'kotlin-kapt'
+    // Navigation
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 android {
