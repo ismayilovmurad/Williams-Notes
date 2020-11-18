@@ -43,15 +43,9 @@ class MainFragment : Fragment(), NoteAdapter.ItemClickListener {
         mainViewModel = getViewModel()
 
         val noteList = arrayListOf<Note>()
-        noteList.add(Note(0, Date(), "sakdljaskldaadasdsdsdsdsss"))
-        noteList.add(
-            Note(
-                1,
-                Date(),
-                "sakdljaskldaadasdsdsdsdssssakdljaskldaadasdsdsdsdssssakdljaskldaadasdsdsdsdsss"
-            )
-        )
-        noteList.add(Note(2, Date(), "sakdljaskldaadasdsdsdsdssssakdljaskldaadasdsdsdsdsss"))
+        noteList.add(Note(0, Date(), "Watch a LinkedIn tutorial"))
+        noteList.add(Note(1, Date(), "Continue to build Movie Diary app"))
+        noteList.add(Note(2, Date(), "Do the workout"))
 
         val noteAdapter = NoteAdapter(noteList, this)
 
