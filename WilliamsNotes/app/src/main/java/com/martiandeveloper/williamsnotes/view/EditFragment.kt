@@ -44,8 +44,13 @@ class EditFragment : Fragment() {
 
             })
 
+        editViewModel = getViewModel()
+
+        Toast.makeText(context, "${args.noteId}", Toast.LENGTH_SHORT).show()
+
         fragmentEditBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_edit, container, false)
+
         return fragmentEditBinding.root
 
     }
@@ -59,14 +64,6 @@ class EditFragment : Fragment() {
             it.setHomeAsUpIndicator(R.drawable.ic_check)
         }
 
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        editViewModel = getViewModel()
-
-        Toast.makeText(context, "${args.noteId}", Toast.LENGTH_SHORT).show()
     }
 
     private fun getViewModel(): EditViewModel {

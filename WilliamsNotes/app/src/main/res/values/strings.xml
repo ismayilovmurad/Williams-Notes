@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">William\'s Notes</string>
     <string name="enter_note">Enter note</string>
+    <string name="delete_all">Delete all</string>
 </resources>

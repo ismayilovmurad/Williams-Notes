@@ -1,9 +1,8 @@
 package com.martiandeveloper.williamsnotes.view
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -29,18 +28,15 @@ class MainFragment : Fragment(), NoteAdapter.ItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+
+        setHasOptionsMenu(true)
+
+        mainViewModel = getViewModel()
 
         fragmentMainBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
-        return fragmentMainBinding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        super.onViewCreated(view, savedInstanceState)
-
-        mainViewModel = getViewModel()
 
         val noteList = arrayListOf<Note>()
         noteList.add(Note(0, Date(), "Watch a LinkedIn tutorial"))
@@ -57,6 +53,7 @@ class MainFragment : Fragment(), NoteAdapter.ItemClickListener {
             layoutManager = LinearLayoutManager(context)
         }
 
+        return fragmentMainBinding.root
     }
 
     private fun getViewModel(): MainViewModel {
@@ -74,6 +71,25 @@ class MainFragment : Fragment(), NoteAdapter.ItemClickListener {
 
     override fun onItemClick(noteId: Int) {
         findNavController().navigate(MainFragmentDirections.actionMainFragmentToEditFragment(noteId))
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_main, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        return when (item.itemId) {
+            R.id.action_delete_all -> deleteAll()
+            else -> super.onOptionsItemSelected(item)
+        }
+
+    }
+
+    private fun deleteAll(): Boolean {
+        Toast.makeText(context, "Yeah", Toast.LENGTH_SHORT).show()
+        return true
     }
 
 }
