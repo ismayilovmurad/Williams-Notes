@@ -18,7 +18,7 @@ abstract class NoteDatabase : RoomDatabase() {
 
         private var INSTANCE: NoteDatabase? = null
 
-        fun getInstance(context: Context): RoomDatabase? {
+        fun getInstance(context: Context): NoteDatabase? {
 
             if (INSTANCE == null) {
 

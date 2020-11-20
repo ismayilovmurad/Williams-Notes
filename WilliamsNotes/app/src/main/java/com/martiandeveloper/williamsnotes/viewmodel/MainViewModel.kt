@@ -1,5 +1,13 @@
 package com.martiandeveloper.williamsnotes.viewmodel
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import com.martiandeveloper.williamsnotes.database.NoteDatabase
 
-class MainViewModel : ViewModel()
+class MainViewModel(app: Application) : AndroidViewModel(app) {
+
+    private val database = NoteDatabase.getInstance(app)
+
+    val noteList = database?.noteDao()?.getAll()
+
+}

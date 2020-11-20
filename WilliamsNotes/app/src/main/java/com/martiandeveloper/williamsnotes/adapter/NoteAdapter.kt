@@ -9,21 +9,45 @@ import com.martiandeveloper.williamsnotes.databinding.RecyclerviewNoteItemBindin
 import com.martiandeveloper.williamsnotes.model.Note
 
 class NoteAdapter(
-    private val noteList: ArrayList<Note>,
-    private val itemClickListener: ItemClickListener
+    private val noteList: List<Note>,
+    private val itemListener: ItemListener
 ) :
     RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
+
+    val selectedNotes = arrayListOf<Note>()
 
     inner class NoteViewHolder(private val recyclerviewNoteItemBinding: RecyclerviewNoteItemBinding) :
         RecyclerView.ViewHolder(recyclerviewNoteItemBinding.root) {
 
-        fun bind(note: Note, itemClickListener: ItemClickListener) {
+        fun bind(note: Note, itemListener: ItemListener) {
 
             recyclerviewNoteItemBinding.note = note.text
             recyclerviewNoteItemBinding.executePendingBindings()
 
+            recyclerviewNoteItemBinding.recyclerviewNoteItemAddFAB.setOnClickListener {
+
+                if (selectedNotes.contains(note)) {
+                    selectedNotes.remove(note)
+                    recyclerviewNoteItemBinding.recyclerviewNoteItemAddFAB.setImageResource(R.drawable.ic_note)
+                } else {
+                    selectedNotes.add(note)
+                    recyclerviewNoteItemBinding.recyclerviewNoteItemAddFAB.setImageResource(R.drawable.ic_check)
+                }
+
+                itemListener.onItemSelectionChange()
+
+            }
+
+            recyclerviewNoteItemBinding.recyclerviewNoteItemAddFAB.setImageResource(
+                if (selectedNotes.contains(note)) {
+                    R.drawable.ic_check
+                } else {
+                    R.drawable.ic_note
+                }
+            )
+
             itemView.setOnClickListener {
-                itemClickListener.onItemClick(note.id)
+                itemListener.onItemClick(note.id)
             }
 
         }
@@ -43,15 +67,16 @@ class NoteAdapter(
     }
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
-        holder.bind(noteList[position], itemClickListener)
+        holder.bind(noteList[position], itemListener)
     }
 
     override fun getItemCount(): Int {
         return noteList.size
     }
 
-    interface ItemClickListener {
+    interface ItemListener {
         fun onItemClick(noteId: Int)
+        fun onItemSelectionChange()
     }
 
 }

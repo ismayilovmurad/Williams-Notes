@@ -15,7 +15,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/layout_recyclerview_item_addFAB"
+            android:id="@+id/recyclerview_note_item_addFAB"
             android:layout_width="72dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -39,7 +39,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/layout_recyclerview_item_addFAB"
+            app:layout_constraintStart_toEndOf="@id/recyclerview_note_item_addFAB"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
