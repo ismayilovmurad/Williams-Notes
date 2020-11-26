@@ -1,6 +1,10 @@
 <resources>
-    <string name="app_name">William\'s Notes</string>
+    <string name="app_name" translatable="false">William\'s Notes</string>
     <string name="enter_note">Enter note</string>
     <string name="delete_all">Delete all</string>
     <string name="delete">Delete</string>
+    <string name="new_note">New note</string>
+    <string name="edit_note">Edit note</string>
+    <string name="main_banner" translatable="false">ca-app-pub-3036948542324685/8199730124</string>
+    <string name="main_interstitial" translatable="false">ca-app-pub-3036948542324685/8483457692</string>
 </resources>
