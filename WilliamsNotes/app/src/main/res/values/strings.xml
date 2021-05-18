@@ -5,6 +5,6 @@
     <string name="delete">Delete</string>
     <string name="new_note">New note</string>
     <string name="edit_note">Edit note</string>
-    <string name="main_banner" translatable="false">ca-app-pub-3036948542324685/8199730124</string>
-    <string name="main_interstitial" translatable="false">ca-app-pub-3036948542324685/8483457692</string>
+    <string name="unknown">Unknown</string>
+    <string name="note_saved">Note saved</string>
 </resources>

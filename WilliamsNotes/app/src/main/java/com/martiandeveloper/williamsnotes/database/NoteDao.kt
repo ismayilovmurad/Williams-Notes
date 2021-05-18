@@ -12,7 +12,7 @@ interface NoteDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(notes: List<Note>)
 
-    @Query("SELECT * FROM notes ORDER BY date ASC")
+    @Query("SELECT * FROM notes ORDER BY date DESC")
     fun getAll(): LiveData<List<Note>>
 
     @Query("SELECT * FROM notes WHERE id = :id")

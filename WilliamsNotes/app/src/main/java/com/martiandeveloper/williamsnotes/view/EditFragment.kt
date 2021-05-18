@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -20,59 +21,68 @@ import com.martiandeveloper.williamsnotes.utils.CURSOR_POSITION_KEY
 import com.martiandeveloper.williamsnotes.utils.NEW_NOTE_ID
 import com.martiandeveloper.williamsnotes.utils.NOTE_TEXT_KEY
 import com.martiandeveloper.williamsnotes.viewmodel.EditViewModel
+import java.util.*
 
 class EditFragment : Fragment() {
 
-    private lateinit var editViewModel: EditViewModel
+    private lateinit var viewModel: EditViewModel
 
-    private lateinit var fragmentEditBinding: FragmentEditBinding
+    private lateinit var binding: FragmentEditBinding
 
     private val args: EditFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
-        setUpButton()
+        viewModel = ViewModelProvider(this).get(EditViewModel::class.java)
+
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_edit, container, false)
+
+        observe(savedInstanceState)
+
+        setActionBar()
 
         setHasOptionsMenu(true)
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
+        with(requireActivity()) {
+            title =
+                getString(if (args.noteId == NEW_NOTE_ID) R.string.new_note else R.string.edit_note)
 
-                override fun handleOnBackPressed() {
-                    saveAndReturn()
-                }
+            onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+                object : OnBackPressedCallback(true) {
 
-            })
+                    override fun handleOnBackPressed() {
+                        saveAndReturn()
+                    }
 
-        requireActivity().title =
-            if (args.noteId == NEW_NOTE_ID) {
-                getString(R.string.new_note)
-            } else {
-                getString(R.string.edit_note)
-            }
+                })
+        }
 
-        editViewModel = ViewModelProvider(this).get(EditViewModel::class.java)
+        viewModel.getNoteById(args.noteId)
 
-        fragmentEditBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_edit, container, false)
-
-        editViewModel.currentNote.observe(viewLifecycleOwner, {
-            val savedString = savedInstanceState?.getString(NOTE_TEXT_KEY)
-            val cursorPosition = savedInstanceState?.getInt(CURSOR_POSITION_KEY) ?: 0
-            fragmentEditBinding.fragmentEditEditET.setText(savedString ?: it.text)
-            fragmentEditBinding.fragmentEditEditET.setSelection(cursorPosition)
-        })
-
-        editViewModel.getNoteById(args.noteId)
-
-        return fragmentEditBinding.root
+        return binding.root
 
     }
 
-    private fun setUpButton() {
+    private fun observe(savedInstanceState: Bundle?) {
+
+        viewModel.currentNote.observe(viewLifecycleOwner, {
+
+            with(binding.fragmentEditEditET) {
+                val savedString = savedInstanceState?.getString(NOTE_TEXT_KEY)
+                val cursorPosition = savedInstanceState?.getInt(CURSOR_POSITION_KEY) ?: 0
+                setText(savedString ?: it.text)
+                setSelection(cursorPosition)
+            }
+
+        })
+
+    }
+
+    private fun setActionBar() {
 
         (activity as AppCompatActivity).supportActionBar?.let {
             it.setHomeButtonEnabled(true)
@@ -80,6 +90,34 @@ class EditFragment : Fragment() {
             it.setDisplayHomeAsUpEnabled(true)
             it.setHomeAsUpIndicator(R.drawable.ic_check)
         }
+
+    }
+
+    private fun saveAndReturn(): Boolean {
+
+        val imm = requireActivity()
+            .getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
+
+        with(viewModel) {
+
+            if (currentNote.value?.text != binding.fragmentEditEditET.text.toString()) {
+                currentNote.value?.text = binding.fragmentEditEditET.text.toString()
+                currentNote.value?.date = Date()
+                updateNote()
+
+                Toast.makeText(
+                    binding.root.context,
+                    getString(R.string.note_saved),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+        }
+
+        findNavController().navigateUp()
+
+        return true
 
     }
 
@@ -92,22 +130,9 @@ class EditFragment : Fragment() {
 
     }
 
-    private fun saveAndReturn(): Boolean {
-        val imm = requireActivity()
-            .getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(fragmentEditBinding.root.windowToken, 0)
-
-        editViewModel.currentNote.value?.text =
-            fragmentEditBinding.fragmentEditEditET.text.toString()
-        editViewModel.updateNote()
-
-        findNavController().navigateUp()
-        return true
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
 
-        with(fragmentEditBinding.fragmentEditEditET) {
+        with(binding.fragmentEditEditET) {
             outState.putString(NOTE_TEXT_KEY, text.toString())
             outState.putInt(CURSOR_POSITION_KEY, selectionStart)
         }

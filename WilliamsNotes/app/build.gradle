@@ -3,7 +3,7 @@ plugins {
     id 'kotlin-android'
     // Data binding
     id 'kotlin-kapt'
-    // Navigation
+    // Navigation component
     id 'androidx.navigation.safeargs.kotlin'
     // Parcelable
     id 'kotlin-android-extensions'
@@ -59,9 +59,8 @@ dependencies {
     implementation "com.google.android.material:material:$material_version"
     // ConstraintLayout
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    // Lifecycle
+    implementation "android.arch.lifecycle:extensions:$lifecycle_version"
     // Test
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"
@@ -69,12 +68,8 @@ dependencies {
     // Navigation component
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
-    // RecyclerView
-    implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
     // Room
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
-    // Google Ads
-    implementation "com.google.android.gms:play-services-ads:$google_ads_version"
 }

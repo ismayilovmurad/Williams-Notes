@@ -21,16 +21,21 @@ import com.martiandeveloper.williamsnotes.viewmodel.MainViewModel
 
 class MainFragment : Fragment(), NoteAdapter.ItemListener {
 
-    private lateinit var mainViewModel: MainViewModel
+    private lateinit var viewModel: MainViewModel
 
-    private lateinit var fragmentMainBinding: FragmentMainBinding
+    private lateinit var binding: FragmentMainBinding
 
-    private lateinit var noteAdapter: NoteAdapter
+    private lateinit var adapter: NoteAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
 
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
@@ -38,31 +43,26 @@ class MainFragment : Fragment(), NoteAdapter.ItemListener {
 
         requireActivity().title = getString(R.string.app_name)
 
-        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-
-        fragmentMainBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
-
-        with(fragmentMainBinding.fragmentMainMainRV) {
+        with(binding.fragmentMainMainRV) {
             setHasFixedSize(true)
             val divider = DividerItemDecoration(context, LinearLayoutManager(context).orientation)
             addItemDecoration(divider)
         }
 
-        mainViewModel.noteList?.observe(viewLifecycleOwner, {
-            noteAdapter = NoteAdapter(it, this@MainFragment)
-            fragmentMainBinding.fragmentMainMainRV.adapter = noteAdapter
-            fragmentMainBinding.fragmentMainMainRV.layoutManager = LinearLayoutManager(activity)
+        viewModel.noteList?.observe(viewLifecycleOwner, {
+            adapter = NoteAdapter(it, this@MainFragment)
+            binding.fragmentMainMainRV.adapter = adapter
+            binding.fragmentMainMainRV.layoutManager = LinearLayoutManager(activity)
 
             val selectedNotes = savedInstanceState?.getParcelableArrayList<Note>(SELECTED_NOTES_KEY)
-            noteAdapter.selectedNotes.addAll(selectedNotes ?: emptyList())
+            adapter.selectedNotes.addAll(selectedNotes ?: emptyList())
         })
 
-        fragmentMainBinding.fragmentMainAddFAB.setOnClickListener {
+        binding.fragmentMainAddFAB.setOnClickListener {
             onItemClick(NEW_NOTE_ID)
         }
 
-        return fragmentMainBinding.root
+        return binding.root
     }
 
     override fun onItemClick(noteId: Int) {
@@ -76,7 +76,7 @@ class MainFragment : Fragment(), NoteAdapter.ItemListener {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 
         val menuId =
-            if (this::noteAdapter.isInitialized && noteAdapter.selectedNotes.isNotEmpty()) {
+            if (this::adapter.isInitialized && adapter.selectedNotes.isNotEmpty()) {
                 R.menu.menu_main_selected
             } else {
                 R.menu.menu_main
@@ -98,16 +98,16 @@ class MainFragment : Fragment(), NoteAdapter.ItemListener {
     }
 
     private fun deleteAllNotes(): Boolean {
-        mainViewModel.deleteAllNotes()
+        viewModel.deleteAllNotes()
         return true
     }
 
     private fun deleteSelectedNotes(): Boolean {
 
-        mainViewModel.deleteSelectedNotes(noteAdapter.selectedNotes)
+        viewModel.deleteSelectedNotes(adapter.selectedNotes)
 
         Handler(Looper.getMainLooper()).postDelayed({
-            noteAdapter.selectedNotes.clear()
+            adapter.selectedNotes.clear()
             requireActivity().invalidateOptionsMenu()
         }, 100)
 
@@ -117,8 +117,8 @@ class MainFragment : Fragment(), NoteAdapter.ItemListener {
 
     override fun onSaveInstanceState(outState: Bundle) {
 
-        if (this::noteAdapter.isInitialized) {
-            outState.putParcelableArrayList(SELECTED_NOTES_KEY, noteAdapter.selectedNotes)
+        if (this::adapter.isInitialized) {
+            outState.putParcelableArrayList(SELECTED_NOTES_KEY, adapter.selectedNotes)
         }
 
         super.onSaveInstanceState(outState)

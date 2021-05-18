@@ -21,16 +21,9 @@ class EditViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
 
             withContext(Dispatchers.IO) {
-
                 val note =
-                    if (noteId != NEW_NOTE_ID) {
-                        database?.noteDao()?.getNoteById(noteId)
-                    } else {
-                        Note()
-                    }
-
+                    if (noteId != NEW_NOTE_ID) database?.noteDao()?.getNoteById(noteId) else Note()
                 currentNote.postValue(note)
-
             }
 
         }
@@ -43,20 +36,13 @@ class EditViewModel(app: Application) : AndroidViewModel(app) {
 
             it.text = it.text.trim()
 
-            if (it.id == NEW_NOTE_ID && it.text.isEmpty()) {
-                return
-            }
+            if (it.id == NEW_NOTE_ID && it.text.isEmpty()) return
 
             viewModelScope.launch {
 
                 withContext(Dispatchers.IO) {
-
-                    if (it.text.isEmpty()) {
-                        database?.noteDao()?.deleteNote(it)
-                    } else {
-                        database?.noteDao()?.insertNote(it)
-                    }
-
+                    if (it.text.isEmpty()) database?.noteDao()
+                        ?.deleteNote(it) else database?.noteDao()?.insertNote(it)
                 }
 
             }

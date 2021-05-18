@@ -8,6 +8,10 @@
             name="note"
             type="String" />
 
+        <variable
+            name="date"
+            type="String" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,7 +19,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/recyclerview_note_item_addFAB"
+            android:id="@+id/recyclerview_note_item_selectFAB"
             android:layout_width="72dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -28,19 +32,31 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_note" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:text="@{note}"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_margin="8dp"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/recyclerview_note_item_addFAB"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@id/recyclerview_note_item_selectFAB"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@{note}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{date}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

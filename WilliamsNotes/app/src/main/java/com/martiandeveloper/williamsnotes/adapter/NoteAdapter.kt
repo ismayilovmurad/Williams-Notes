@@ -1,5 +1,6 @@
 package com.martiandeveloper.williamsnotes.adapter
 
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -7,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.martiandeveloper.williamsnotes.R
 import com.martiandeveloper.williamsnotes.databinding.RecyclerviewNoteItemBinding
 import com.martiandeveloper.williamsnotes.model.Note
+import com.martiandeveloper.williamsnotes.utils.DateConverter
+import java.sql.Timestamp
+import java.text.ParseException
 
 class NoteAdapter(
     private val noteList: List<Note>,
@@ -22,29 +26,37 @@ class NoteAdapter(
         fun bind(note: Note, itemListener: ItemListener) {
 
             recyclerviewNoteItemBinding.note = note.text
-            recyclerviewNoteItemBinding.executePendingBindings()
+            recyclerviewNoteItemBinding.date = getPrettyTime(
+                Timestamp(DateConverter().dateToTimestamp(note.date)),
+                recyclerviewNoteItemBinding
+            )
 
-            recyclerviewNoteItemBinding.recyclerviewNoteItemAddFAB.setOnClickListener {
+            recyclerviewNoteItemBinding.recyclerviewNoteItemSelectFAB.setOnClickListener {
 
-                if (selectedNotes.contains(note)) {
-                    selectedNotes.remove(note)
-                    recyclerviewNoteItemBinding.recyclerviewNoteItemAddFAB.setImageResource(R.drawable.ic_note)
-                } else {
-                    selectedNotes.add(note)
-                    recyclerviewNoteItemBinding.recyclerviewNoteItemAddFAB.setImageResource(R.drawable.ic_check)
+                with(recyclerviewNoteItemBinding.recyclerviewNoteItemSelectFAB) {
+
+                    if (selectedNotes.contains(note)) {
+                        selectedNotes.remove(note)
+                        setImageResource(R.drawable.ic_note)
+                    } else {
+                        selectedNotes.add(note)
+                        setImageResource(R.drawable.ic_check)
+                    }
+
                 }
 
                 itemListener.onItemSelectionChange()
 
             }
 
-            recyclerviewNoteItemBinding.recyclerviewNoteItemAddFAB.setImageResource(
-                if (selectedNotes.contains(note)) {
-                    R.drawable.ic_check
-                } else {
-                    R.drawable.ic_note
-                }
+            recyclerviewNoteItemBinding.recyclerviewNoteItemSelectFAB.setImageResource(
+                if (selectedNotes.contains(
+                        note
+                    )
+                ) R.drawable.ic_check else R.drawable.ic_note
             )
+
+            recyclerviewNoteItemBinding.executePendingBindings()
 
             itemView.setOnClickListener {
                 itemListener.onItemClick(note.id)
@@ -54,16 +66,32 @@ class NoteAdapter(
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
-        val recyclerviewNoteItemBinding: RecyclerviewNoteItemBinding = DataBindingUtil
-            .inflate(
-                LayoutInflater.from(parent.context),
-                R.layout.recyclerview_note_item,
-                parent,
-                false
-            )
+    private fun getPrettyTime(time: Timestamp, binding: RecyclerviewNoteItemBinding): String {
 
-        return NoteViewHolder(recyclerviewNoteItemBinding)
+        return try {
+            val currentTime = System.currentTimeMillis()
+            val prettyTime = DateUtils.getRelativeTimeSpanString(
+                time.time,
+                currentTime,
+                DateUtils.MINUTE_IN_MILLIS
+            )
+            prettyTime.toString()
+        } catch (e: ParseException) {
+            binding.root.context.resources.getString(R.string.unknown)
+        }
+
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
+        return NoteViewHolder(
+            DataBindingUtil
+                .inflate(
+                    LayoutInflater.from(parent.context),
+                    R.layout.recyclerview_note_item,
+                    parent,
+                    false
+                )
+        )
     }
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {

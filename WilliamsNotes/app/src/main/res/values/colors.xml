@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <color name="tulip_tree">#E7A545</color>
-    <color name="flamingo" tools:ignore="UnusedResources">#E4584B</color>
-    <color name="monte_carlo">#89C5BD</color>
     <color name="espresso">#502E2D</color>
-    <color name="teal_700" tools:ignore="UnusedResources">#018786</color>
-    <color name="pale_espresso" tools:ignore="UnusedResources">#80502E2D</color>
-    <color name="pale_flamingo" tools:ignore="UnusedResources">#80E4584B</color>
+    <color name="monte_carlo">#89C5BD</color>
+    <color name="pale_espresso">#80502E2D</color>
+    <color name="flamingo" tools:ignore="UnusedResources">#E4584B</color>
 </resources>

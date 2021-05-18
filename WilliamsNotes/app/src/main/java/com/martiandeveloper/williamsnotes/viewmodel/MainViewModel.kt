@@ -15,7 +15,6 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     val noteList = database?.noteDao()?.getAll()
 
-
     fun deleteSelectedNotes(selectedNotes: List<Note>) {
 
         viewModelScope.launch {
